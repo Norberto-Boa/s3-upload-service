@@ -1,19 +1,21 @@
-import { S3 } from "aws-sdk";
 import { UploadParams } from "../@types/Upload";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
-export class UploadService {
-  s3;
+const s3 = new S3Client({
+  region: process.env.S3_REGION as string,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_ID as string,
+  },
+});
 
-  constructor() {
-    this.s3 = new S3();
-  }
+export async function upload({ body, bucket, key, contentType }: UploadParams) {
+  const command = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: body,
+    ContentType: contentType,
+  });
 
-  async upload({ body, bucket, key, contentType }: UploadParams) {
-    return await this.s3.upload({
-      Body: body,
-      Bucket: bucket,
-      Key: key,
-      ContentType: contentType,
-    }).promise();
-  }
+  return await s3.send(command);
 }

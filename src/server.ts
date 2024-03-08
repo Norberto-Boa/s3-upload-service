@@ -1,6 +1,8 @@
 import express from "express";
 import { router } from "./routes/routes";
+import AWS from "aws-sdk";
 
+require("dotenv").config();
 const app = express();
 
 app.use(express.json());
