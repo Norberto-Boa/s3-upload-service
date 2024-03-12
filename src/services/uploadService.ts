@@ -13,6 +13,7 @@ export async function upload({ body, bucket, key, contentType }: UploadParams) {
   const command = new PutObjectCommand({
     Bucket: bucket,
     Key: key,
+    ContentDisposition: "attachment",
     Body: body,
     ContentType: contentType,
   });
