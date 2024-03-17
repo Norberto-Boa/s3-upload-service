@@ -1,19 +1,20 @@
 import { RetrieveParams } from "../@types/Retrieve";
 import AWS from "aws-sdk";
+import { AWS_CONFIG } from "../utils/config";
 
 const s3 = new AWS.S3({
-  region: process.env.S3_REGION as string,
+  region: AWS_CONFIG.S3_REGION,
   logger: undefined,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_ID as string,
+    accessKeyId: AWS_CONFIG.AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_CONFIG.AWS_SECRET_ACCESS_KEY_ID,
   },
 });
 
 export async function Retrieve({ key }: RetrieveParams) {
   return s3
     .getObject({
-      Bucket: process.env.S3_BUCKET as string,
+      Bucket: AWS_CONFIG.S3_BUCKET as string,
       Key: key,
     })
     .promise();

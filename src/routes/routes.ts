@@ -5,6 +5,8 @@ import multer from "multer";
 import { multerUpload } from "../middleware/FileMiddleware";
 import { RetrieveController } from "../controllers/RetrieveController";
 
+require("dotenv").config();
+
 const router = Router();
 
 const upload = new UploadController();

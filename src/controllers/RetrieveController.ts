@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Retrieve } from "../services/RetrieveService";
-import { Readable } from "stream";
 
 export const RetrieveController = async (req: Request, res: Response) => {
   const { key } = req.params;
@@ -9,7 +8,15 @@ export const RetrieveController = async (req: Request, res: Response) => {
     const { Body, ContentType } = await Retrieve({ key });
 
     if (Body) {
-      res.setHeader("Content-disposition", `attachment; filename=${key}`);
+      if (ContentType === "application/pdf") {
+        res.setHeader("Content-disposition", `attachment; filename=${key}`);
+      } else if (
+        ContentType === "image/jpg" ||
+        ContentType === "image/jpeg" ||
+        ContentType === "image/png"
+      ) {
+        res.setHeader("Content-disposition", `inline; filename=${key}`);
+      }
       res.setHeader("Content-Type", ContentType ?? "application/pdf");
 
       res.send(Body);
